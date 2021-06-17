@@ -69,12 +69,12 @@ class AbxComparator:
     def _on_a_button_toggled(self, *args):
         if self.a_button.get_active():
             # if paused, unpause
-            if self.sound_player.get_state()[1] == Gst.State.PAUSED:
+            if self.sound_player.get_state(1)[1] == Gst.State.PAUSED:
                 self.sound_player.set_state(Gst.State.PLAYING)
                 gobject.timeout_add(50, self.update_slider)
                 return
             # if we're playing now on a different button, set a place holder for the position so we can switch it immediately
-            if self.sound_player.get_state()[1] == Gst.State.PLAYING:
+            if self.sound_player.get_state(1)[1] == Gst.State.PLAYING:
                 self.current_sample = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
             else:
                 self.current_sample = self.begin_sample
@@ -100,7 +100,8 @@ class AbxComparator:
                 self.sound_player.set_state(Gst.State.PLAYING)
                 gobject.timeout_add(50, self.update_slider)
                 return
-            if self.sound_player.get_state()[1] == Gst.State.PLAYING:
+            # if self.sound_player.get_state()[1] == Gst.State.PLAYING:
+            if self.sound_player.current_state() == Gst.State.PLAYING:
                 self.current_sample = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
             else:
                 self.current_sample = self.begin_sample
@@ -119,11 +120,11 @@ class AbxComparator:
 
     def _on_x_button_toggled(self, *args):
         if self.x_button.get_active():
-            if self.sound_player.get_state()[1] == Gst.State.PAUSED:
+            if self.sound_player.get_state(1)[1] == Gst.State.PAUSED:
                 self.sound_player.set_state(Gst.State.PLAYING)
                 gobject.timeout_add(50, self.update_slider)
                 return
-            if self.sound_player.get_state()[1] == Gst.State.PLAYING:
+            if self.sound_player.get_state(1)[1] == Gst.State.PLAYING:
                 self.current_sample = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
             else:
                 self.current_sample = self.begin_sample
@@ -206,14 +207,16 @@ class AbxComparator:
         # load a temporary playbin2 instance, and use it to determine duration
         tempPlayer = Gst.ElementFactory.make("playbin", "sound_player")
         tempPlayer.set_property('uri', location)
+        print(dir(tempPlayer))
         tempPlayer.set_state(Gst.State.PLAYING)
-        tempPlayer.get_state()
+        duration = -1
+        #~ print(tempPlayer.current_state)
 
-        try:
-	        duration = tempPlayer.query_duration(Gst.FORMAT_TIME)[0]
-        except:
-	        print("Couldn't determine stream duration.\n",
-                                    "Unsupported stream?")	
+        #~ try:
+	        #~ duration = tempPlayer.query_duration(Gst.FORMAT_TIME) # [0]
+        #~ except:
+	        #~ print("Couldn't determine stream duration.\n",
+                                    #~ "Unsupported stream?")	
 
         tempPlayer.set_state(Gst.State.NULL)
 
@@ -288,7 +291,7 @@ class AbxComparator:
 
     def phoenix (self, *args):
         self.sound_player.set_state(Gst.State.NULL)
-        self.sound_player.get_state()
+        self.sound_player.get_state(1)
         self.sound_player = None
         self.sound_player = Gst.ElementFactory.make("playbin", "sound_player")
      
