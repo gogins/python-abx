@@ -2,13 +2,13 @@
 
 <http://github.com/gogins/python-abx>
 
-## About ##
+## About
 
 A simple GTK application for performing ABX testing using python3 and gstreamer.
 
-This codebase is a cleaned up fork of [python-abx](https://code.google.com/archive/p/python-abx/). I have ported the code to Python3 and Gtk+ 3.0.
+This is an updated fork of https://github.com/lrvick/python-abx. I have ported the code to Python3 and Gtk+ 3.0.
 
-## Requirements ##
+## Requirements
 
   * python3
   * GTK3
@@ -16,21 +16,17 @@ This codebase is a cleaned up fork of [python-abx](https://code.google.com/archi
   * python-gtk
   * python-gst
 
-## Current Features ##
+## Current Features
 
-  * Swap A/B on at any point while playing
-  * Perform any number of tests and show/hide results at any time
+  * Swap A/B on at any point while playing.
+  * Perform any number of tests and show/hide results at any time.
 
-## Usage / Installation ##
+## Usage / Installation
 
-1. run abx.py
+1. Run abx.py: ```python3  abx.py```.
 
-    ```bash
-    ./abx.py
-    ```
 2. Select files for A and B
 
-3. Play A,B,X and make make your guesses
+3. Play A, B, and X and guess if A is X or B is X.
 
-4. "Show" to show results
-
+4. Click "Show" after a number of trials to see your results.
