@@ -1,18 +1,18 @@
 # python-abx #
 
-<http://github.com/lrvick/python-abx>
+<http://github.com/gogins/python-abx>
 
 ## About ##
 
-A simple GTK application for performing ABX testing using python and gstreamer.
+A simple GTK application for performing ABX testing using python3 and gstreamer.
 
-This codebase is a slightly cleaned up fork of [python-abx](https://code.google.com/archive/p/python-abx/) which was abandoned, and itself was a fork of the long
-dead [ABX-Comparator](http://freecode.com/projects/abx-comparator)
+This codebase is a cleaned up fork of [python-abx](https://code.google.com/archive/p/python-abx/). I have ported the code to Python3 and Gtk+ 3.0.
 
 ## Requirements ##
-  * python2.7
-  * GTK2
-  * gstreamer-0.10 (And various good, bad, and ugly modules as needed)
+
+  * python3
+  * GTK3
+  * gstreamer (And various good, bad, and ugly modules as needed)
   * python-gtk
   * python-gst
 
@@ -34,7 +34,3 @@ dead [ABX-Comparator](http://freecode.com/projects/abx-comparator)
 
 4. "Show" to show results
 
-## Notes ##
-
-  I only tweaked this enough to get it working for me.
-  Use at your own risk. You may be eaten by a grue.
