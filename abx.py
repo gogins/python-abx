@@ -6,35 +6,36 @@ gi.require_version("Gst", "1.0")
 from gi.repository import Gst 
 import sys
 import random
-import gobject
+from gi.repository import GObject
+from gi.repository import GLib
 import math
 
 Gst.init(sys.argv)
 
 class AbxComparator:
-    #sound_player = Gst.element_factory_make("playbin2", "sound_player")
-    sound_player = Gst.ElementFactory.make("playbin", "sound_player")
+    sound_player = Gst.ElementFactory.make("playbin3", "sound_player")
     print("sound_player:", sound_player)
-    a_location, a_duration, b_duration, b_location = None, None, None, None
+    a_location = None
+    a_duration = None
+    b_duration = None
+    b_location = None
     current_location = None
-
-    correct, incorrect = 0, 0
-
-    begin_sample, end_sample, current_sample = 0, 0, 0
-
+    correct = 0
+    incorrect = 0
+    begin_sample = 0
+    end_sample = 0
+    current_sample = 0
     # keep track of whether we're dragging the position bar
     mouse_active_on_hscale = False
-
     # set the locations if available
     def __init__(self, a_location=None, b_location=None):
-
         ui = "abx-comparator.ui"
         builder = Gtk.Builder()
         builder.add_from_file(ui)
         builder.connect_signals(self)
         window = builder.get_object("abx_audio_window")
         window.show_all()
-
+        self.state_change_latency = 1000000000 * .1
         # define elements of the .ui so we can access them
         self.a_button = builder.get_object("a_button")
         self.b_button = builder.get_object("b_button")
@@ -69,13 +70,13 @@ class AbxComparator:
     def _on_a_button_toggled(self, *args):
         if self.a_button.get_active():
             # if paused, unpause
-            if self.sound_player.get_state(1)[1] == Gst.State.PAUSED:
+            if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PAUSED:
                 self.sound_player.set_state(Gst.State.PLAYING)
-                gobject.timeout_add(50, self.update_slider)
+                GLib.timeout_add(50, self.update_slider)
                 return
             # if we're playing now on a different button, set a place holder for the position so we can switch it immediately
-            if self.sound_player.get_state(1)[1] == Gst.State.PLAYING:
-                self.current_sample = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
+            if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PLAYING:
+                self.current_sample = self.sound_player.query_position(Gst.Format.TIME)[0]
             else:
                 self.current_sample = self.begin_sample
             self.phoenix()
@@ -84,25 +85,24 @@ class AbxComparator:
             self.sound_player.set_property('uri', self.a_location)
             self.sound_player.set_state(Gst.State.PLAYING)
             # workaround for a playbin2 bug - we have to get the current state before it starts playing for some reason. check upstream?
-            self.sound_player.get_state()
-            self.sound_player.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, self.current_sample)
+            self.sound_player.get_state(self.state_change_latency)
+            self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.current_sample)
             self.begin_button.set_sensitive(True)
             self.end_button.set_sensitive(True)
             # set a 50 msec timeout to update the position slider
-            gobject.timeout_add(50, self.update_slider)
+            GLib.timeout_add(50, self.update_slider)
         else:
             self.sound_player.set_state(Gst.State.PAUSED)
 
     # the other buttons are similar...
     def _on_b_button_toggled(self, *args):
         if self.b_button.get_active():
-            if self.sound_player.get_state()[1] == Gst.State.PAUSED:
+            if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PAUSED:
                 self.sound_player.set_state(Gst.State.PLAYING)
-                gobject.timeout_add(50, self.update_slider)
+                GLib.timeout_add(50, self.update_slider)
                 return
-            # if self.sound_player.get_state()[1] == Gst.State.PLAYING:
-            if self.sound_player.current_state() == Gst.State.PLAYING:
-                self.current_sample = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
+            if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PLAYING:
+                self.current_sample = self.sound_player.query_position(Gst.Format.TIME)[0]
             else:
                 self.current_sample = self.begin_sample
             self.phoenix()
@@ -110,22 +110,22 @@ class AbxComparator:
             self.x_button.set_active(False)
             self.sound_player.set_property('uri', self.b_location)
             self.sound_player.set_state(Gst.State.PLAYING)
-            self.sound_player.get_state()
-            self.sound_player.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, self.current_sample)
+            self.sound_player.get_state(self.state_change_latency)
+            self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.current_sample)
             self.begin_button.set_sensitive(True)
             self.end_button.set_sensitive(True)
-            gobject.timeout_add(50, self.update_slider)
+            GLib.timeout_add(50, self.update_slider)
         else:
             self.sound_player.set_state(Gst.State.PAUSED)
 
     def _on_x_button_toggled(self, *args):
         if self.x_button.get_active():
-            if self.sound_player.get_state(1)[1] == Gst.State.PAUSED:
+            if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PAUSED:
                 self.sound_player.set_state(Gst.State.PLAYING)
-                gobject.timeout_add(50, self.update_slider)
+                GLib.timeout_add(50, self.update_slider)
                 return
-            if self.sound_player.get_state(1)[1] == Gst.State.PLAYING:
-                self.current_sample = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
+            if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PLAYING:
+                self.current_sample = self.sound_player.query_position(Gst.Format.TIME)[0]
             else:
                 self.current_sample = self.begin_sample
             self.phoenix()
@@ -133,11 +133,11 @@ class AbxComparator:
             self.b_button.set_active(False)
             self.sound_player.set_property('uri', self.current_location)
             self.sound_player.set_state(Gst.State.PLAYING)
-            self.sound_player.get_state()
-            self.sound_player.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, self.current_sample)
+            self.sound_player.get_state(self.state_change_latency)
+            self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.current_sample)
             self.begin_button.set_sensitive(True)
             self.end_button.set_sensitive(True)
-            gobject.timeout_add(50, self.update_slider)
+            GLib.timeout_add(50, self.update_slider)
         else:
             self.sound_player.set_state(Gst.State.PAUSED)
     
@@ -162,19 +162,19 @@ class AbxComparator:
     def _start_selection_button_toggled(self, *args):
         if self.begin_button.get_active():
             # set rounded version of time as label text
-            self.begin_button.set_label(str("%.2f" %(self.sound_player.query_position(Gst.FORMAT_TIME)[0] / Gst.MSECOND / 1000.0)))
+            self.begin_button.set_label(str("%.2f" %(self.sound_player.query_position(Gst.Format.TIME)[1] / Gst.MSECOND / 1000.0)))
             # record position to begin_sample
-            self.begin_sample = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
+            self.begin_sample = self.sound_player.query_position(Gst.Format.TIME)[1]
         else:
             self.begin_button.set_label("Start")
             self.begin_sample = 0
 
     def _end_selection_button_toggled(self, *args):
         if self.end_button.get_active():
-            self.end_button.set_label(str("%.2f" %(self.sound_player.query_position(Gst.FORMAT_TIME)[0] / Gst.MSECOND / 1000.0)))
-            self.end_sample = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
+            self.end_button.set_label(str("%.2f" %(self.sound_player.query_position(Gst.Format.TIME)[1] / Gst.MSECOND / 1000.0)))
+            self.end_sample = self.sound_player.query_position(Gst.Format.TIME)[1]
             # we've just set an "end position", so immediately loop to the begin_sample
-            self.sound_player.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, self.begin_sample)
+            self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.begin_sample)
         else:
             self.end_button.set_label("End")
             self.end_sample = 0
@@ -198,7 +198,7 @@ class AbxComparator:
 
     def _hscale_button_release(self, *args):
         # seek to the new location
-        self.sound_player.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, self.audio_adjustment.value)
+        self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.audio_adjustment.get_value())
         # and then set the bool. not the other way around to avoid potential problems with timing
         self.mouse_active_on_hscale = False
         return
@@ -207,19 +207,16 @@ class AbxComparator:
         # load a temporary playbin2 instance, and use it to determine duration
         tempPlayer = Gst.ElementFactory.make("playbin", "sound_player")
         tempPlayer.set_property('uri', location)
-        print(dir(tempPlayer))
-        tempPlayer.set_state(Gst.State.PLAYING)
+        tempPlayer.set_state(Gst.State.PAUSED)
+        tempPlayer.get_state(self.state_change_latency)
         duration = -1
-        #~ print(tempPlayer.current_state)
-
-        #~ try:
-	        #~ duration = tempPlayer.query_duration(Gst.FORMAT_TIME) # [0]
-        #~ except:
-	        #~ print("Couldn't determine stream duration.\n",
-                                    #~ "Unsupported stream?")	
-
+        duration_ = tempPlayer.query_duration(Gst.Format.TIME)
+        # In nanoseconds.
+        duration = duration_[1]
+        if duration_[0] == False:
+            print("Couldn't determine stream duration.\n",
+                                    "Unsupported stream?")	
         tempPlayer.set_state(Gst.State.NULL)
-
         print(location, duration)
         return duration
 
@@ -259,31 +256,37 @@ class AbxComparator:
 
     # run on a timer every 50msec whenever sound_player is playing
     def update_slider(self, *args):
+        print("update_slider")
         # don't deactivate if dragging position slider, just bypass
         if self.mouse_active_on_hscale:
+            print("update_slider: bypassing")
             return True
         # if we're not playing, stop the timer
-        if self.sound_player.get_state()[1] == Gst.State.NULL:
+        if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.NULL:
+            print("update_slider: not playing")
             return False
         # if we've run past the slider or past the user's limit, stop
-        if self.sound_player.query_position(Gst.FORMAT_TIME)[0] > self.audio_adjustment.upper or self.sound_player.query_position(Gst.FORMAT_TIME)[0] > self.end_sample and self.end_sample != 0:
+        if self.sound_player.query_position(Gst.Format.TIME)[1] > self.audio_adjustment.upper or self.sound_player.query_position(Gst.Format.TIME)[1] > self.end_sample and self.end_sample != 0:
             #repeat if selected
             if self.repeat_button.get_active():
                 # sanity check the begin_sample, and go there if appropriate
                 if self.end_sample > self.begin_sample:
-                    self.sound_player.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, self.begin_sample)
+                    self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.begin_sample)
                 else:
-                    self.sound_player.seek_simple(Gst.FORMAT_TIME, Gst.SEEK_FLAG_FLUSH, 0.0)
+                    self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, 0.0)
             else:
+                print("update_slider: played to end")
                 self.stop()
                 return False
         # seems to fail occasionally if still seeking, so simply get_state() and wait for the next timed update
         # TODO: is get_state() actually doing anything?
         try:
-            self.audio_adjustment.value = self.sound_player.query_position(Gst.FORMAT_TIME)[0]
+            self.audio_adjustment.set_value(self.sound_player.query_position(Gst.Format.TIME)[1])
         except:
-            self.sound_player.get_state()
-        return self.sound_player.get_state()[1] == Gst.State.PLAYING
+            self.sound_player.get_state(self.state_change_latency)
+        print("update_slider: playing")
+        self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PLAYING
+        return True
 
     # phoenix(), a dirty hack to work around bugs in playbin2
     # idea from the quodlibet player
@@ -291,7 +294,7 @@ class AbxComparator:
 
     def phoenix (self, *args):
         self.sound_player.set_state(Gst.State.NULL)
-        self.sound_player.get_state(1)
+        self.sound_player.get_state(self.state_change_latency)
         self.sound_player = None
         self.sound_player = Gst.ElementFactory.make("playbin", "sound_player")
      
@@ -312,7 +315,7 @@ class AbxComparator:
         self.begin_button.set_sensitive(False)
         self.end_button.set_sensitive(False)
         self.sound_player.set_state(Gst.State.NULL)
-        self.audio_adjustment.value = 0
+        self.audio_adjustment.set_value(0)
     
     def quit(self, *args):
         Gtk.main_quit(*args)

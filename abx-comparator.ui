@@ -9,8 +9,9 @@
   <object class="GtkWindow" id="abx_audio_window">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
-    <property name="title">python-abx</property>
-    <property name="resizable">False</property>
+    <property name="width_request">800</property>
+    <property name="title">ABX Soundfile Comparator</property>
+    <property name="resizable">True</property>
     <property name="icon">abx-comparator.svg</property>
     <property name="startup_id">abx_window</property>
     <signal name="delete-event" handler="_on_main_window_delete_event" swapped="no"/>
@@ -597,7 +598,7 @@
                       <object class="GtkTextView" id="resultsview">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="border_width">1</property>
+                        <property name="border_width">5px</property>
                         <property name="pixels_above_lines">3</property>
                         <property name="editable">False</property>
                         <property name="left_margin">3</property>
