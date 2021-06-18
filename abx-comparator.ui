@@ -27,7 +27,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label">&lt;b&gt;Audio Files&lt;/b&gt;</property>
+                <property name="label">&lt;b&gt;Soundfiles&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>
@@ -120,7 +120,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label">&lt;b&gt;Sample Selection&lt;/b&gt;</property>
+                <property name="label">&lt;b&gt;Playback loop&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>
@@ -260,7 +260,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label">&lt;b&gt;ABX Options&lt;/b&gt;</property>
+                <property name="label">&lt;b&gt;ABX Test&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>
@@ -313,7 +313,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label10">
                                     <property name="can_focus">False</property>
-                                    <property name="label">X = B</property>
+                                    <property name="label">X is B</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -382,7 +382,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label9">
                                     <property name="can_focus">False</property>
-                                    <property name="label">X = A</property>
+                                    <property name="label">X is A</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>

@@ -19,7 +19,7 @@ class AbxComparator:
     soundfile_a_duration_nanoseconds = None
     soundfile_b = None
     soundfile_b_duration_nanoseconds = None
-    current_location = None
+    soundfile_current = None
     correct = 0
     incorrect = 0
     playback_segment_start_nanoseconds = 0
@@ -27,7 +27,7 @@ class AbxComparator:
     playback_current_position_nanoseconds = 0
     # keep track of whether we're dragging the position bar
     mouse_active_on_hscale = False
-    # set the locations if available
+    # set the soundfiles, if available
     def __init__(self, soundfile_a=None, soundfile_b=None):
         ui = "abx-comparator.ui"
         builder = Gtk.Builder()
@@ -35,8 +35,7 @@ class AbxComparator:
         builder.connect_signals(self)
         window = builder.get_object("abx_audio_window")
         window.show_all()
-        self.state_change_latency = 1000000000 * .1
-        # define elements of the .ui so we can access them
+        self.state_change_latency = 1000000000 * .3
         self.a_button = builder.get_object("a_button")
         self.b_button = builder.get_object("b_button")
         self.x_button = builder.get_object("x_button")
@@ -76,7 +75,7 @@ class AbxComparator:
                 self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
             else:
                 self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
-            ###self.phoenix()
+            self.phoenix()
             self.x_button.set_active(False)
             self.b_button.set_active(False)
             self.sound_player.set_property('uri', self.soundfile_a)
@@ -102,7 +101,7 @@ class AbxComparator:
                 self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
             else:
                 self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
-            ###self.phoenix()
+            self.phoenix()
             self.a_button.set_active(False)
             self.x_button.set_active(False)
             self.sound_player.set_property('uri', self.soundfile_b)
@@ -125,10 +124,10 @@ class AbxComparator:
                 self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
             else:
                 self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
-            ###self.phoenix()
+            self.phoenix()
             self.a_button.set_active(False)
             self.b_button.set_active(False)
-            self.sound_player.set_property('uri', self.current_location)
+            self.sound_player.set_property('uri', self.soundfile_current)
             self.sound_player.set_state(Gst.State.PLAYING)
             self.sound_player.get_state(self.state_change_latency)
             self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.playback_current_position_nanoseconds)
@@ -141,7 +140,7 @@ class AbxComparator:
     # if user IDs a song, stop playing, and check for correct, giving points accordingly
     def _on_isa_button_clicked(self, *args):
         self.stop()
-        if self.current_location == self.soundfile_a: 
+        if self.soundfile_current == self.soundfile_a: 
             self.correct += 1
         else:
             self.incorrect += 1
@@ -149,7 +148,7 @@ class AbxComparator:
 
     def _on_isb_button_clicked(self, *args):
         self.stop()
-        if self.current_location == self.soundfile_b: 
+        if self.soundfile_current == self.soundfile_b: 
             self.correct += 1
         else:
             self.incorrect += 1
@@ -224,9 +223,9 @@ class AbxComparator:
             self.enable_buttons()
             # prepare test
             if random.random() > 0.5:
-                self.current_location = self.soundfile_a
+                self.soundfile_current = self.soundfile_a
             else:
-                self.current_location = self.soundfile_b
+                self.soundfile_current = self.soundfile_b
         self.update_results()
 
     def update_results(self, *args):
@@ -300,7 +299,7 @@ class AbxComparator:
         self.begin_button.set_sensitive(False)
         self.end_button.set_sensitive(False)
         self.sound_player.set_state(Gst.State.NULL)
-        self.audio_adjustment.set_value(0)
+        self.audio_adjustment.set_value(self.playback_segment_start_nanoseconds)
     
     def quit(self, *args):
         Gtk.main_quit(*args)
