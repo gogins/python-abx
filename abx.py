@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import gi
 gi.require_version("Gtk", "3.0")
@@ -14,7 +15,6 @@ Gst.init(sys.argv)
 
 class AbxComparator:
     sound_player = Gst.ElementFactory.make("playbin3", "sound_player")
-    print("sound_player:", sound_player)
     soundfile_a = None
     soundfile_a_duration_nanoseconds = None
     soundfile_b = None
@@ -125,7 +125,7 @@ class AbxComparator:
                 self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
             else:
                 self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
-            self.phoenix()
+            ###self.phoenix()
             self.a_button.set_active(False)
             self.b_button.set_active(False)
             self.sound_player.set_property('uri', self.current_location)

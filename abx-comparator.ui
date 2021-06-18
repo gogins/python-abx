@@ -156,8 +156,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Repeat playback</property>
-                    <property name="tooltip_text">Repeat playback</property>
+                    <property name="tooltip_markup" translatable="yes">Loop between Start and End</property>
+                    <property name="tooltip_text">Loop between Start and End</property>
                     <property name="use_action_appearance">False</property>
                     <child>
                       <object class="GtkAlignment" id="alignment1">
