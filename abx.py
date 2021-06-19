@@ -233,10 +233,16 @@ class AbxComparator:
         duration_ = tempPlayer.query_duration(Gst.Format.TIME)
         duration = duration_[1]
         if duration_[0] == False:
-            print("Couldn't determine stream duration.\n",
-                                    "Unsupported stream?")	
+            dialog = Gtk.MessageDialog(parent=None, 
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK, 
+                text="Couldn't determine stream duration.",
+                secondary_text="Either this is an unsupported soundfile format, or you should just try reloading the file.")
+            dialog.run()
+            dialog.destroy() 
+        else:            
+            print("Loaded: {}, {} seconds.".format(location, duration / 1000000000))
         tempPlayer.set_state(Gst.State.NULL)
-        print(location, duration)
         return duration
 
     def update_gui(self, *args):
