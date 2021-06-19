@@ -19,6 +19,7 @@ class AbxComparator:
     soundfile_a_duration_nanoseconds = None
     soundfile_b = None
     soundfile_b_duration_nanoseconds = None
+    soundfile_comparison_nanoseconds = None
     soundfile_current = None
     correct = 0
     incorrect = 0
@@ -70,9 +71,9 @@ class AbxComparator:
                 self.sound_player.set_state(Gst.State.PLAYING)
                 GLib.timeout_add(50, self.update_slider)
                 return
-            # if we're playing now on a different button, set a place holder for the position so we can switch it immediately
             if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PLAYING:
-                self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
+                #self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
+                self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
             else:
                 self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
             self.phoenix()
@@ -98,7 +99,8 @@ class AbxComparator:
                 GLib.timeout_add(50, self.update_slider)
                 return
             if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PLAYING:
-                self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
+                #self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
+                self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
             else:
                 self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
             self.phoenix()
@@ -121,7 +123,8 @@ class AbxComparator:
                 GLib.timeout_add(50, self.update_slider)
                 return
             if self.sound_player.get_state(self.state_change_latency)[1] == Gst.State.PLAYING:
-                self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
+                #self.playback_current_position_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[0]
+                self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
             else:
                 self.playback_current_position_nanoseconds = self.playback_segment_start_nanoseconds
             self.phoenix()
@@ -153,7 +156,7 @@ class AbxComparator:
         else:
             self.incorrect += 1
         self.update_gui()
-
+    '''
     # set positions to loop over section of audio
     def _start_selection_button_toggled(self, *args):
         if self.begin_button.get_active():
@@ -169,6 +172,27 @@ class AbxComparator:
         if self.end_button.get_active():
             self.end_button.set_label(str("%.2f" %(self.sound_player.query_position(Gst.Format.TIME)[1] / Gst.MSECOND / 1000.0)))
             self.playback_segment_end_nanoseconds = self.sound_player.query_position(Gst.Format.TIME)[1]
+            # we've just set an "end position", so immediately loop to the playback_segment_start_nanoseconds
+            self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.playback_segment_start_nanoseconds)
+        else:
+            self.end_button.set_label("End")
+            self.playback_segment_end_nanoseconds = 0
+    '''
+    # set positions to loop over section of audio
+    def _start_selection_button_toggled(self, *args):
+        if self.begin_button.get_active():
+            # set rounded version of time as label text
+            self.begin_button.set_label(str("%.2f" %(self.audio_adjustment.get_value() / 1000000000)))
+            # record position to playback_segment_start_nanoseconds
+            self.playback_segment_start_nanoseconds = self.audio_adjustment.get_value()
+        else:
+            self.begin_button.set_label("Start")
+            self.playback_segment_start_nanoseconds = 0
+
+    def _end_selection_button_toggled(self, *args):
+        if self.end_button.get_active():
+            self.end_button.set_label(str("%.2f" %(self.audio_adjustment.get_value() / 1000000000)))
+            self.playback_segment_end_nanoseconds = self.audio_adjustment.get_value()
             # we've just set an "end position", so immediately loop to the playback_segment_start_nanoseconds
             self.sound_player.seek_simple(Gst.Format.TIME, Gst.SeekFlags.FLUSH, self.playback_segment_start_nanoseconds)
         else:

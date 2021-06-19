@@ -27,7 +27,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label">&lt;b&gt;Soundfiles&lt;/b&gt;</property>
+                <property name="label">&lt;b&gt;Soundfiles to compare&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>
@@ -120,7 +120,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label">&lt;b&gt;Playback loop&lt;/b&gt;</property>
+                <property name="label">&lt;b&gt;Segment to play&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>
@@ -156,8 +156,8 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Loop between Start and End</property>
-                    <property name="tooltip_text">Loop between Start and End</property>
+                    <property name="tooltip_markup" translatable="yes">Playback segment in loop</property>
+                    <property name="tooltip_text">Playback segment in loop</property>
                     <property name="use_action_appearance">False</property>
                     <child>
                       <object class="GtkAlignment" id="alignment1">
@@ -260,7 +260,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label">&lt;b&gt;ABX Test&lt;/b&gt;</property>
+                <property name="label">&lt;b&gt;ABX test&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>
