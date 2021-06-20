@@ -3,9 +3,10 @@
 -d -R -W -Z -f --sample-accurate -oxanadu.wav
 </CsOptions>
 <CsInstruments>
-sr          =           192000
-ksmps       =           128
+sr          =           96000
+ksmps       =           10
 nchnls      =           2
+
 ;--------------------------------------------------------
 ;Instrument 1 : plucked strings chorused left/right and
 ;       pitch-shifted and delayed taps thru exponential
@@ -16,8 +17,8 @@ nchnls      =           2
 ishift      =           .00666667               ;shift it 8/1200.
 ipch        =           cpspch(p5)              ;convert parameter 5 to cps.
 ioct        =           octpch(p5)              ;convert parameter 5 to oct.
-kvib        oscili       1/120, ipch/50, 1       ;vibrato
-ag          pluck       2000, cpsoct(ioct+kvib), 1000, 1, 1
+kvib        oscil       1/120, ipch/50, 1       ;vibrato
+ag          pluck       2000, cpsoct(ioct+kvib),   1000, 1, 1
 agleft      pluck       2000, cpsoct(ioct+ishift), 1000, 1, 1
 agright     pluck       2000, cpsoct(ioct-ishift), 1000, 1, 1
 kf1         expon       .1, p3, 1.0             ;exponential from 0.1 to 1.0
@@ -39,13 +40,13 @@ ad2         deltapi     1.1                     ;delay 1.1 sec.
 ishift      =           .00666667               ;shift it 8/1200.
 ipch        =           cpspch(p5)              ;convert parameter 5 to cps.
 ioct        =           octpch(p5)              ;convert parameter 5 to oct.
-kvib        oscili       1/120, ipch/50, 1       ;vibrato
-ag          pluck       1000, cpsoct(ioct+kvib), 1000, 1, 1
+kvib        oscil       1/120, ipch/50, 1       ;vibrato
+ag          pluck       1000, cpsoct(ioct+kvib),   1000, 1, 1
 agleft      pluck       1000, cpsoct(ioct+ishift), 1000, 1, 1
 agright     pluck       1000, cpsoct(ioct-ishift), 1000, 1, 1
 adump       delayr      0.3                     ;set delay line of 0.3 sec
-ad1         deltapi      0.1                     ;delay 100 msec.
-ad2         deltapi      0.2                     ;delay 200 msec.
+ad1         deltapi     0.1                     ;delay 100 msec.
+ad2         deltapi     0.2                     ;delay 200 msec.
             delayw      ag                      ;put ag sign into del line.
             outs        agleft+ad1, agright+ad2
             endin       
@@ -71,7 +72,6 @@ aoutl       oscil       1000*kadsr*a4, ao2+cpsoct(ioct+ishift), 1 ;fnl outleft
 aoutr       oscil       1000*kadsr*a4, ao2+cpsoct(ioct-ishift), 1 ;fnl outright
             outs        aoutl, aoutr
             endin       
-
 
 </CsInstruments>
 <CsScore>
