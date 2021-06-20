@@ -36,7 +36,7 @@ class AbxComparator:
         builder.connect_signals(self)
         window = builder.get_object("abx_audio_window")
         window.show_all()
-        self.state_change_latency = 1000000000 * .3
+        self.state_change_latency = 1000000000 * .5
         self.a_button = builder.get_object("a_button")
         self.b_button = builder.get_object("b_button")
         self.x_button = builder.get_object("x_button")

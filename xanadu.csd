@@ -1,10 +1,10 @@
 <CsoundSynthesizer>
 <CsOptions>
--d -R -W -Z -f --sample-accurate -oxanadu.wav
+-d -R -W -Z -f -oxanadu.wav
 </CsOptions>
 <CsInstruments>
-sr          =           96000
-ksmps       =           10
+sr          =           48000
+ksmps       =           100
 nchnls      =           2
 
 ;--------------------------------------------------------
