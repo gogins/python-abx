@@ -269,7 +269,7 @@ class AbxComparator:
             p = 0
             for x in range(k, n + 1):
                 p = p + math.factorial(n) / (math.factorial(x) * math.factorial(n - x)) * 0.5 ** n
-            p_str = "%.2f%%" % round(p * 100, 2)
+            p_str = "{:10.8f}".format(p)
         else:
             score_value, p_str = "hidden", "hidden"
         self.text_buffer.set_text("Score: " + score_value + " / " + str(self.correct + self.incorrect) + "\np = " + str(p_str))
