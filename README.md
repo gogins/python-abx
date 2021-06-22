@@ -18,7 +18,7 @@ different options and different variants of opcodes. As an example of such
 use, there are two variants of a Csound piece, **_Xanadu_**, in this 
 repository --- `xanadu.csd` (the original) and `xanadu-high-resolution.csd` 
 (modified by me for quieter and more accurate synthesis). I have described 
-how this is done in the document **_Hearing Audio Quality in Csound_**, 
+how this is done in the document (**_Hearing Audio Quality in Csound_**)[csound-audio-quality.pdf], 
 also contained in this repository.
 
 This is an updated fork of https://github.com/lrvick/python-abx. I have ported 
