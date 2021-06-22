@@ -48,11 +48,9 @@ Install the following:
    probability of a false positive, then you should probably conclude that 
    you just can't hear aby difference between the files.
    
-The user may set a segment of the soundfiles for comparison. While playing, 
-click the Start button at the desired position to set the start of the 
-segment, then click the End button at the desired position to set the end of 
-the segment. Click on the "Loop" button to enable or disable playing the 
-segment in a repeating loop. 
+The user may set a segment of the soundfiles for comparison. Click the Start 
+button to set the beginning of the segment, and click the End button to set 
+the end of the segment. Click on the "Loop" button to enable or disable 
+playing the segment in a repeating loop. Clicking again on the Start or End 
+button resets its position.
 
-To reset the start or end point of the segment, click again on the Start or 
-End button
