@@ -4,6 +4,11 @@ This program computes the difference between two soundfiles and runs Audacity
 to view and hear it. This can show the nature of artifacts caused by 
 differences in processing the soundfiles.
 
+This program will not produce satisfactory results unless the soundfile format 
+is the same for both files, and either there is no random number generator 
+used to produce audio, or the random number generators all consistently use 
+the same random seed, and the amplitude levels for audio are the same.
+
 Author: Michael Gogins
 License: Gnu Lesser General Public License, version 2.1
 
