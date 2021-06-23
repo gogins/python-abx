@@ -42,7 +42,7 @@ Install the following:
 
 3. Play A, B, and X and guess if A is X or B is X.
 
-4. After a number of trials, click "Show" to print the probability you  
+4. After a number of trials, click "Show" to print the probability you 
    identified X correctly just by accident. It may take a dozen or so trials 
    to obtain high confidence in your results. If you never do obtain a low 
    probability of a false positive, then you should probably conclude that 
