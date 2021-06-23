@@ -54,6 +54,6 @@ the end of the segment. Click on the "Loop" button to enable or disable
 playing the segment in a repeating loop. Clicking again on the Start or End 
 button resets its position.
 
-For more information, see (**_Hearing Audio Quality in Csound_**)[csound-audio-quality.pdf] 
+For more information, see [_Hearing Audio Quality in Csound_](csound-audio-quality.pdf)  
 in this repository.
 
