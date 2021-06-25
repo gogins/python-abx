@@ -1,7 +1,8 @@
-# python-abx #<br>
+# python-abx #
+![GitHub All Releases (total)](https://img.shields.io/github/downloads/gogins/python-abx/total.svg)<br>
+<br>
 https://github.com/gogins<br>
 http://michaelgogins.tumblr.com
-![GitHub All Releases (total)](https://img.shields.io/github/downloads/gogins/python-abx/total.svg)<br>
 
 
 <http://github.com/gogins/python-abx>
