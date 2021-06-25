@@ -1,4 +1,5 @@
 # python-abx #
+![GitHub All Releases (total)](https://img.shields.io/github/downloads/gogins/csound-extended/total.svg)<br>
 [![Github All Releases](https://img.shields.io/github/downloads/gogins/python-abx/total.svg)]()
 <br>
 https://github.com/gogins<br>
