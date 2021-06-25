@@ -1,5 +1,6 @@
 # python-abx #
 ![GitHub All Releases (total)](https://img.shields.io/github/downloads/gogins/python-abx/total.svg)<br>
+[![Downloads](https://pepy.tech/badge/video2tfrecord)](gogins/python-abx)
 <br>
 https://github.com/gogins<br>
 http://michaelgogins.tumblr.com
