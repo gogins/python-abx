@@ -51,7 +51,7 @@ Install the following:
    identified X correctly just by accident. It may take a dozen or so trials 
    to obtain high confidence in your results. If you never do obtain a low 
    probability of a false positive, then you should probably conclude that 
-   you just can't hear aby difference between the files.
+   you just can't hear any difference between the files.
    
 The user may set a segment of the soundfiles for comparison. Click the Start 
 button to set the beginning of the segment, and click the End button to set 
